@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch the Square</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        #gameArea {
+            width: 600px;
+            height: 400px;
+            border: 2px solid #333;
+            position: relative;
+            background-color: #fff;
+        }
+        #target {
+            width: 50px;
+            height: 50px;
+            background-color: #ff5555;
+            position: absolute;
+            cursor: pointer;
+        }
+        #score {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #timer {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="score">Score: <span id="scoreValue">0</span></div>
+    <div id="timer">Time Left: <span id="timeLeft">30</span>s</div>
+    <div id="gameArea">
+        <div id="target"></div>
+    </div>
+
+    <script>
+        const target = document.getElementById('target');
+        const scoreDisplay = document.getElementById('scoreValue');
+        const timeDisplay = document.getElementById('timeLeft');
+        const gameArea = document.getElementById('gameArea');
+
+        let score = 0;
+        let timeLeft = 30;
+        let gameActive = true;
+
+        // Move the square to a random position
+        function moveSquare() {
+            if (!gameActive) return;
+            const maxX = gameArea.clientWidth - target.clientWidth;
+            const maxY = gameArea.clientHeight - target.clientHeight;
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            target.style.left = randomX + 'px';
+            target.style.top = randomY + 'px';
+        }
+
+        // Update score when square is clicked
+        target.addEventListener('click', () => {
+            if (!gameActive) return;
+            score++;
+            scoreDisplay.textContent = score;
+            moveSquare();
+        });
+
+        // Timer countdown
+        const timer = setInterval(() => {
+            timeLeft--;
+            timeDisplay.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                gameActive = false;
+                alert(`Game Over! Your score: ${score}`);
+            }
+        }, 1000);
+
+        // Start the game
+        moveSquare();
+    </script>
+</body>
+</html>
